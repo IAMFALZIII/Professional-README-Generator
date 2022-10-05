@@ -1,99 +1,68 @@
 // TODO: Include packages needed for this application
 
-var fileGenerator = require("./fileGenerator");
-var fs = require("fs");
-var inquirer = require('inquirer');
+const inquirer = require("inquirer");
+const fs = require('fs');
+const util = require('./utils/generateMarkdown');
+const generateMarkdown = require("./utils/generateMarkdown");
 
 // TODO: Create an array of questions for user input
 const questions = [
     {
-        type: "input",
-        message: "What is the title of your repository?",
-        name: "title"
-    },{
-        type: "input",
-        message: "Please give your logo information.",
-        name: "logo"
-    },{
-        type: "input",
-        message: "What is your GitHub user name?",
-        name: "userName"
-    },{
-        type: "input",
-        message: "Please give your GitHub profile link.",
-        name: "GitHub"
-    },{
-        type: "input",
-        message: "What is your email?",
-        name: "email"
-    },{
-        type: "list",
-        name: "license",
-        message: "Please select which license you would like to use.",
-        choices : [
-            "APACHE 2.O",
-            "BSD 3",
-            "GVL-GPL 3.0",
-            "MIT",
-            "None"
-        ],
-    },{
-        type: "input",
-        message: "Please describe the repository.",
-        name: "description"
+        message: 'Please enter the title for your project:',
+        name: 'title'
+    },
+    {
+        message: 'Enter a description for your project:',
+        name: 'description'
+    },
+    {
+        message: 'Enter any installation notes, or install instructions for your project:',
+        name: 'installation'
+    },
+    {
+        message: 'Enter any Usage related information for sharing your project:',
+        name: 'usage',
+    },
+    {
+        type: 'list',
+        message: 'Please choose a license you would like to use with this project:',
+        choices: ['MIT', 'Boost_1.0', 'Apache_2.0'],
+        name: 'license'
+    },
+    {
+        message: 'Enter the contribution guidelines for this project:',
+        name: 'contributions'
+    },
+    {
+        message: 'Enter any testing/test instructions required for this project:',
+        name: 'test'
+    },
+    {
+        message: 'Enter your Github Username',
+        name: 'username'
+    },
+    {
+        message: 'Enter an email address the public can contact you at:',
+        name: 'email'
+    },
 
-    },{
-        type: "input",
-        message: "Please state if others can contribute.",
-        name: "contribute"
-    },{
-        type: "input",
-        message: "Please state any test(s) require (1/3).",
-        name: "test"
-    },{
-        type: "input",
-        message: "Please state any test(s) require(2/3).",
-        name: "test2"
-    },{
-        type: "input",
-        message: "Please state any test(s) require (3/3).",
-        name: "test3",
-    },{
-        type: "input",
-        message: "State your accomplishments.",
-        name: "accomplish"
-    },{
-        type: "input",
-        message: "Please state provide a screenshot (1 of 3).",
-        name: "scriptjs"
-    },{
-        type: "input",
-        message: "Please state provide a screenshot (2 of 3).",
-        name: "fileGnerator"
-    },{
-        type: "input",
-        message: "Please state provide a screenshot (3 of 3).",
-        name: "ReadMe"
-    },{
-        type: "input",
-        message: "Please supply two references (1/2).",
-        name: "ref1"
-    },{
-        type: "input",
-        message: "Please supply two references (2/2).",
-        name: "ref2"
-    },{
-        type: "input",
-        message: "Please state your end-goal.",
-        name: "endgoal"
-    }
-];
+];;
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+function writeToFile(data) {
+    fs.writeFile('README.md', generateMarkdown(data), 
+    (err) => (err)
+    ?console.log('Could not generate README.md, error has occured.')
+    : console.log('README.md generated'));
+}
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+    inquirer.prompt(questions)
+    .then((data) => {
+        writeToFile(data);
+    })
+};
 
 // Function call to initialize app
 init();

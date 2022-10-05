@@ -1,12 +1,12 @@
 {
   "name": "static-site",
   "version": "1.0.0",
-  "description": "",
+  "description": "Creating README.md generator",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Fernando Zamora",
   "license": "MIT",
   "dependencies": {
     "inquirer": "^8.2.4"
