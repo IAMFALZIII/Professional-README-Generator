@@ -1,67 +1,147 @@
-// TODO: Include packages needed for this application
-
-const inquirer = require("inquirer");
+// Global require's
+const inquirer = require('inquirer');
 const fs = require('fs');
-const util = require('./utils/generateMarkdown');
-const generateMarkdown = require("./utils/generateMarkdown");
+const generateMarkdown = require('./utils/generateMarkdown.js')
 
-// TODO: Create an array of questions for user input
+// Array of questions to ask the user
 const questions = [
+    // Project name
     {
-        message: 'Please enter the title for your project:',
-        name: 'title'
+        type: 'input',
+        name: 'title',
+        message: 'What is the title of the project? (Required)',
+        validate: titleInput => {
+            if (titleInput) {
+                return true;
+            } else {
+                console.log('You need to enter a title to continue!');
+                return false;
+            }
+        }
     },
+    // Description of project
     {
-        message: 'Enter a description for your project:',
-        name: 'description'
+        type: 'input',
+        name: 'description',
+        message: 'Provide a description of the project (Required)',
+        validate: descriptionInput => {
+            if (descriptionInput) {
+                return true;
+            } else {
+                console.log('You need to provide a project description!');
+                return false;
+            }
+        }
     },
+    // Installation Instructions
     {
-        message: 'Enter any installation notes, or install instructions for your project:',
-        name: 'installation'
+        type: 'input',
+        name: 'installation',
+        message: 'How do you install your project? (Required)',
+        validate: installationInput => {
+            if (installationInput) {
+                return true;
+            } else {
+                console.log('You need to provide installation info to continue!');
+                return false;
+            }
+        }
     },
+    // Usage Information
     {
-        message: 'Enter any Usage related information for sharing your project:',
+        type: 'input',
         name: 'usage',
+        message: 'How do you use this project? (Required)',
+        validate: usageInput => {
+            if (usageInput) {
+                return true;
+            } else {
+                console.log('You need to provide information on how to use project!');
+                return false;
+            }
+        }
     },
+    // Contribution Guidlines
     {
-        type: 'list',
-        message: 'Please choose a license you would like to use with this project:',
-        choices: ['MIT', 'Boost_1.0', 'Apache_2.0'],
-        name: 'license'
+        type: 'input',
+        name: 'contribution',
+        message: 'How should people contribute to this project? (Required)',
+        validate: contributionInput => {
+            if (contributionInput) {
+                return true;
+            } else {
+                console.log('You need to provide information on how to contribute to the project!');
+                return false;
+            }
+        }
     },
+    // Test Instructions 
     {
-        message: 'Enter the contribution guidelines for this project:',
-        name: 'contributions'
+        type: 'input',
+        name: 'testing',
+        message: 'How do you test this project? (Required)',
+        validate: testingInput => {
+            if (testingInput) {
+                return true;
+            } else {
+                console.log('You need to describe how to test this project!');
+                return false;
+            }
+        }
     },
+    // License Options
     {
-        message: 'Enter any testing/test instructions required for this project:',
-        name: 'test'
+        type: 'checkbox',
+        name: 'licensing',
+        message: 'Choose a license for your project (Required)',
+        choices: ['Apache', 'MIT', 'Mozilla-Public', 'GNU-General-Public', 'Common-Development-and Distribution', 'None'],
+        validate: licensingInput => {
+            if (licensingInput) {
+                return true;
+            } else {
+                console.log('You must pick a license for the project!');
+                return false;
+            }
+        }
     },
+    // Github Username
     {
-        message: 'Enter your Github Username',
-        name: 'username'
+        type: 'input',
+        name: 'github',
+        message: 'Enter your GitHub Username (Required)',
+        validate: githubInput => {
+            if (githubInput) {
+                return true;
+            } else {
+                console.log('Please enter your GitHub username!');
+                return false;
+            }
+        }
     },
+    // Email Address
     {
-        message: 'Enter an email address the public can contact you at:',
-        name: 'email'
+        type: 'input',
+        name: 'email',
+        message: 'Would you like to include your email?',
     },
+];
 
-];;
+// Function to write README file
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, (err) => {
+        if (err)
+            throw err;
+        console.log('Success! Information transferred to the README!')
+    });
+};
 
-// TODO: Create a function to write README file
-function writeToFile(data) {
-    fs.writeFile('README.md', generateMarkdown(data), 
-    (err) => (err)
-    ?console.log('Could not generate README.md, error has occured.')
-    : console.log('README.md generated'));
-}
-
-// TODO: Create a function to initialize app
+// Function to initialize app
 function init() {
     inquirer.prompt(questions)
-    .then((data) => {
-        writeToFile(data);
-    })
+    .then(function (userInput) {
+        console.log(userInput)
+        writeToFile("README.md", generateMarkdown(userInput));
+    });
 };
 
 // Function call to initialize app
